@@ -7,7 +7,6 @@ import './assets/tailwind.css'
 const state = {
   selectedFactSheetType: null,
   factSheetTypes: [],
-  modalOpened: false,
   averageCompletion: null
 }
 
@@ -20,6 +19,21 @@ const methods = {
     this.factSheetTypes = [ ...this.factSheetTypes, ...Object.keys(factSheets) ]
     this.selectedFactSheetType = this.factSheetTypes[0]
     return lx.ready({})
+  },
+  async openReportConfigurationModal () {
+    const fields = {
+      factSheetType: {
+        type: 'SingleSelect',
+        label: 'FactSheet Type',
+        options: this.factSheetTypes
+          .map(factSheetType => ({ value: factSheetType, label: lx.translateFactSheetType(factSheetType, 'plural') }))
+      }
+    }
+    const initialValues = {
+      factSheetType: this.selectedFactSheetType
+    }
+    const values = await lx.openFormModal(fields, initialValues)
+    if (values) this.selectedFactSheetType = values.factSheetType
   },
   async fetchGraphqlData () {
     const query = 'query($factSheetType:FactSheetType){allFactSheets(factSheetType:$factSheetType){edges{node{completion{completion}}}}}'
