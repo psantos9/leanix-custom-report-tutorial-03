@@ -16,8 +16,8 @@ const methods = {
     const { settings } = setup
     const { dataModel } = settings
     const { factSheets } = dataModel
-    this.factSheetTypes = [ ...this.factSheetTypes, ...Object.keys(factSheets) ]
-    this.selectedFactSheetType = this.factSheetTypes[0]
+    this.factSheetTypes = Object.keys(factSheets)
+    this.selectedFactSheetType = this.factSheetTypes.length ? this.factSheetTypes[0] : null
     return lx.ready({})
   },
   async openReportConfigurationModal () {
@@ -26,7 +26,7 @@ const methods = {
         type: 'SingleSelect',
         label: 'FactSheet Type',
         options: this.factSheetTypes
-          .map(factSheetType => ({ value: factSheetType, label: lx.translateFactSheetType(factSheetType, 'plural') }))
+          .map(factSheetType => ({ value: factSheetType, label: lx.translateFactSheetType(factSheetType) }))
       }
     }
     const initialValues = {
@@ -35,7 +35,7 @@ const methods = {
     const values = await lx.openFormModal(fields, initialValues)
     if (values) this.selectedFactSheetType = values.factSheetType
   },
-  async fetchGraphqlData () {
+  async fetchGraphQLData () {
     const query = 'query($factSheetType:FactSheetType){allFactSheets(factSheetType:$factSheetType){edges{node{completion{completion}}}}}'
     try {
       lx.showSpinner()

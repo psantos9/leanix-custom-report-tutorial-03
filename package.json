@@ -1,7 +1,7 @@
 {
   "name": "leanix-custom-report-tutorial-03",
   "version": "1.0.0",
-  "description": "Tutorial on how to visualize data from workspace",
+  "description": "Tutorial on how to visualize workspace data using a third party library",
   "engines": {
     "node": ">=12.16.2"
   },

@@ -5,35 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta name="application-name" content="leanix-custom-report-tutorial-03">
-  <meta name="description" content="Tutorial on how to visualize data from workspace">
+  <meta name="description" content="Tutorial on how to visualize workspace data using a third party library">
   <meta name="author" content="LeanIX GmbH">
 
-  <title>Tutorial 03: visualizing data</title>
+  <title>Tutorial 03: how to visualize workspace data using a third party library</title>
+  <style>
+    [x-cloak] { display: none; }
+  </style>
 
 </head>
-<body
-  x-data="initializeContext()"
-  x-init="() => {
-    initializeReport()
-    $watch('selectedFactSheetType', () => fetchGraphqlData())
-    $watch('averageCompletion', () => updateChart())
-  }">
-  <div class="container mx-auto text-md text-gray-800">
-    <div class="flex justify-end py-2">
-      <button
-        class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-        @click="openReportConfigurationModal">
-        Configure Report
-      </button>
-    </div>
 
-    <div class="flex flex-col flex-wrap items-center mt-16 -mx-8 mt-16 z-0">
-      <div class="text-2xl font-bold mb-2">Completeness for</div>
-      <div class="text-4xl font-bold mb-10 " x-text="selectedFactSheetType ? lx.translateFactSheetType(selectedFactSheetType, 'plural') : null"></div>
-      <div x-ref="chartContainer" class="relative p-1">
-        <div class="absolute bottom-0 text-5xl" style="left: 50%; transform: translateX(-50%)" x-ref="legend"></div>
-        <canvas x-ref="chartCanvas" />
+  <body
+    x-data="initializeContext()"
+    x-init="() => {
+      initializeReport()
+      $watch('selectedFactSheetType', () => fetchGraphQLData())
+      $watch('averageCompletion', () => updateChart())
+    }">
+    <div x-cloak class="container mx-auto text-md text-gray-800">
+      <div class="flex justify-end py-2">
+        <button
+          class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+          @click="openReportConfigurationModal">
+          Configure Report
+        </button>
       </div>
-  </div>
-</body>
+
+      <div class="relative flex flex-col flex-wrap items-center mt-16 -mx-8 mt-16">
+        <div class="text-4xl mb-2">Average Completion Ratio for</div>
+        <div class="text-6xl font-bold mb-10 " x-text="selectedFactSheetType ? lx.translateFactSheetType(selectedFactSheetType, 'plural') : null"></div>
+        <div class="absolute bottom-0 -mb-6 font-bold" style="left: 50%; transform: translateX(-50%); font-size: 7rem" x-ref="legend"></div>
+        <div class="w-1/2">
+          <canvas x-ref="chartCanvas" ></canvas>
+        </div>
+      </div>
+  </body>
 </html>
