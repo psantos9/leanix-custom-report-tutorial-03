@@ -23,14 +23,6 @@
       $watch('averageCompletion', () => updateChart())
     }">
     <div x-cloak class="container mx-auto text-md text-gray-800">
-      <div class="flex justify-end py-2">
-        <button
-          class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-          @click="openReportConfigurationModal">
-          Configure Report
-        </button>
-      </div>
-
       <div class="relative flex flex-col flex-wrap items-center mt-16 -mx-8 mt-16">
         <div class="text-4xl mb-2">Average Completion Ratio for</div>
         <div class="text-6xl font-bold mb-10 " x-text="selectedFactSheetType ? lx.translateFactSheetType(selectedFactSheetType, 'plural') : null"></div>
@@ -39,5 +31,6 @@
           <canvas x-ref="chartCanvas" ></canvas>
         </div>
       </div>
+    </div>
   </body>
 </html>

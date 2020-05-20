@@ -5,7 +5,7 @@ Custom reports are a great way for analyzing and communicating Enterprise Archit
 In this step-by-step tutorial we create a simple [LeanIX](https://www.leanix.net/en/) custom report that demonstrates how to integrate a third party library for visualizing workspace data. More specifically, we'll display on a half-pie chart the average completion ratio for a specific factsheet type, configurable by the user, as in the picture below.
 
 <div style="display:flex; justify-content:center">
-  <img src="https://i.imgur.com/djsSRLd.png">
+  <img src="https://i.imgur.com/OzJpbIS.png">
 </div>
 
 The complete source-code for this project can be found [here](https://github.com/pauloramires/leanix-custom-report-tutorial-03).
@@ -164,7 +164,7 @@ In our report we want to analyze the average completion ratio for a specific fac
 
 
 ### Setting up the report configuration workflow
-We want to allow the user to select the factsheet type to be analyzed by the report. For that, we'll implement a **"Report Configuration"** button that triggers a modal presenting to the user a dropdown list of all factsheet types available in the workspace.
+We want to allow the user to select the factsheet type to be analyzed by the report. For that, we will be using the standard **"Settings"** button enabled by the [showConfigure ](https://leanix.github.io/leanix-reporting/interfaces/lxr.reportconfiguration.html#menuactions) flag in the report [configuration](https://leanix.github.io/leanix-reporting/interfaces/lxr.reportconfiguration.html). This **"Settings"** button will trigger a callback that opens a modal containing a dropdown list of all factsheet types available in the workspace.
 
 We start by editing the *index.js* file and declare the following state variables and methods:
 ```javascript
@@ -184,7 +184,14 @@ const methods = {
     this.factSheetTypes = Object.keys(factSheets)
     // and select the first factsheet type of that list
     this.selectedFactSheetType = this.factSheetTypes.length ? this.factSheetTypes[0] : null
-    const config = {}
+    const config = {
+      menuActions: {
+        // we enable here the standard "Settings" button
+        showConfigure: true,
+        // and set the callback for opening the configuration modal defined ahead
+        configureCallback: () => this.openReportConfigurationModal()
+      }
+    }
     // we configure our custom report with an empty configuration object
     return  lx.ready(config)
   },
@@ -208,19 +215,12 @@ const methods = {
   }
 }
 ```
-Now edit the <code>body</code> tag of our *index.html* file to add an **Report Configuration* button that will trigger the configuration modal. We also add an extra element which will display the current selected factsheet type.
+Now edit the <code>body</code> tag of our *index.html* file and add an extra element which will display the current selected factsheet type.
 ```html
 <html>
   ...
   <body x-data="initializeContext()" x-init="initializeReport()">
     <div x-cloak class="container mx-auto h-screen">
-      <div class="flex justify-end py-2">
-        <button
-          class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-          @click="openReportConfigurationModal">
-          Configure Report
-        </button>
-      </div>
       <div x-text="selectedFactSheetType"></div>
     </div>
   </body>
@@ -228,9 +228,9 @@ Now edit the <code>body</code> tag of our *index.html* file to add an **Report C
 </html>
 ```
 
-Notice now that a blue button was placed on the top-right corner of the report, and that when clicking on it the report configuration modal shows up. Confirm that when selecting a different factsheet type, the selected factsheet type placeholder situated on the top-left corner of the report gets updated accordingly.
+Notice now that the **Settings** button appears on the top-right corner of the report, and that when clicking on it the report configuration modal shows up. Confirm that when selecting a different factsheet type, the placeholder element, situated on the top-left corner of the report, gets updated accordingly.
 <div style="display:flex; justify-content:center">
-  <img src="http://i.imgur.com/cEovwfJ.png">
+  <img src="https://i.imgur.com/OCjfkSz.png">
 </div>
 So now that we have our configuration workflow in place, let's proceed with the data querying and visualization part!
 
@@ -279,14 +279,7 @@ We'll edit our *index.html* file and include in the [x-init](https://github.com/
       $watch('selectedFactSheetType', () => fetchGraphQLData())
     }">
     <div x-cloak class="container mx-auto h-screen">
-      <div class="flex justify-end py-2">
-        <button
-          class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-          @click="openReportConfigurationModal">
-          Configure Report
-        </button>
-      </div>
-      <div  x-text="selectedFactSheetType + ' avg completion = ' + (averageCompletion * 100 || 0).toFixed(0) + '%'"></div>
+      <div x-text="selectedFactSheetType + ' avg completion = ' + (averageCompletion * 100 || 0).toFixed(0) + '%'"></div>
     </div>
   </body>
   ...
@@ -294,7 +287,7 @@ We'll edit our *index.html* file and include in the [x-init](https://github.com/
 ```
 Launching our report now, and switching between factsheet types, verify that the average completion percentage, shown on the top-left corner of the report, gets updated accordingly.
 <div style="display:flex; justify-content:center">
-  <img src="https://i.imgur.com/P3cRnBZ.png">
+  <img src="https://i.imgur.com/Gp9S2Nd.png">
 </div>
 Now that we have the data querying mechanism for our report in place, lets proceed to the data visualization part!
 
@@ -312,14 +305,6 @@ We start by editing our *index.html* file and add a <code>div</code> container e
       $watch('averageCompletion', () => updateChart())
     }">
     <div x-cloak class="container mx-auto text-md text-gray-800">
-      <div class="flex justify-end py-2">
-        <button
-          class="text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-          @click="openReportConfigurationModal">
-          Configure Report
-        </button>
-      </div>
-
       <!-- chart container -->
       <div class="relative flex flex-col flex-wrap items-center mt-16 -mx-8 mt-16">
         <!-- chart title -->
@@ -395,7 +380,7 @@ const methods = {
 ```
 Now just run <code>npm start</code> to launch the development server again and observe your report in its full splendour!
 <div style="display:flex; justify-content:center">
-  <img src="https://i.imgur.com/djsSRLd.png">
+  <img src="https://i.imgur.com/OzJpbIS.png">
 </div>
 
 Congratulations, you have finalized this tutorial!

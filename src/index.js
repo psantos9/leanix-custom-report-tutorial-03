@@ -18,7 +18,13 @@ const methods = {
     const { factSheets } = dataModel
     this.factSheetTypes = Object.keys(factSheets)
     this.selectedFactSheetType = this.factSheetTypes.length ? this.factSheetTypes[0] : null
-    return lx.ready({})
+    const config = {
+      menuActions: {
+        showConfigure: true,
+        configureCallback: () => this.openReportConfigurationModal()
+      }
+    }
+    return lx.ready(config)
   },
   async openReportConfigurationModal () {
     const fields = {
