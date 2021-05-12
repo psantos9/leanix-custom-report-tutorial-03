@@ -41,7 +41,7 @@
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@leanix/reporting": "^0.3.3",
     "alpinejs": "^2.3.5",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "d3": "^5.16.0",
     "lodash": "^4.17.11",
     "postcss-loader": "^3.0.0",
